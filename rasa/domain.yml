@@ -1,0 +1,35 @@
+version: "3.1"
+
+intents:
+  - greet
+  - check_order_status
+  - inquire_product_stock
+  - request_return
+
+entities:
+  - order_id
+  - product_name
+
+responses:
+  utter_greet:
+    - text: "Hello! How can I assist you today?"
+  
+  utter_ask_order_id:
+    - text: "Could you share your order number?"
+
+  utter_order_status:
+    - text: "Your order {order_id} is currently {status}."
+
+  utter_product_stock:
+    - text: "We have {stock} units of {product_name} in stock."
+
+  utter_return_instructions:
+    - text: "Please visit [returns portal](https://returns.example.com) with your order number."
+
+actions:
+  - action_get_order_status
+  - action_get_product_stock
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
