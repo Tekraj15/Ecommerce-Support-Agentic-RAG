@@ -8,7 +8,7 @@ This repository contains the source code and project structure for a modular, sc
 
 An AI-powered customer support agent for e-commerce, built with **Rasa** and **FakeStore API**. Handles order tracking, product inquiries, and returns, with seamless integration for mock data.
 
-**Live Demo (Not Ready Yet)**: [Streamlit App](https://your-streamlit-link.streamlit.app/) | [API Docs](https://your-api.herokuapp.com/docs)
+**Live Demo** (Not Ready Yet): [Streamlit App](https://your-streamlit-link.streamlit.app/) | [API Docs](https://your-api.herokuapp.com/docs)
 
 ![Demo](demo.gif) <!-- Add a GIF later -->
 
