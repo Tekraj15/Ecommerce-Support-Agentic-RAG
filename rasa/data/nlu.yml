@@ -1,0 +1,26 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hi
+    - hello
+    - good morning
+
+- intent: check_order_status
+  examples: |
+    - Where is my order [ORD1234]?
+    - Status of order [5678]
+    - Track order [91011]
+
+- intent: inquire_product_stock
+  examples: |
+    - Is [Mens Cotton Jacket] in stock?
+    - Do you have [Samsung 49-Inch Monitor]?
+    - Stock for [White Gold Plated Princess]
+
+- intent: request_return
+  examples: |
+    - I want to return my order
+    - How do I get a refund?
+    - Initiate return for [ORD1234]

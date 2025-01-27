@@ -1,0 +1,7 @@
+version: "3.1"
+
+action_endpoint:
+  url: "http://localhost:5055/webhook"
+
+rasa:
+  url: "http://localhost:5005"

@@ -1,0 +1,22 @@
+version: "3.1"
+
+stories:
+- story: Check order status
+  steps:
+  - intent: check_order_status
+    entities:
+    - order_id : "ORD6573"
+  - action: action_get_order_status
+
+- story: Product stock inquiry
+  steps:
+  - intent: inquire_product_stock
+    entities:
+    - product_name: "Men's cotton jacket"
+  - action: action_get_product_stock
+
+- story: Return request flow
+  steps:
+  - intent: request_return
+  - action: utter_return_instructions
+
