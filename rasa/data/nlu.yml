@@ -6,21 +6,75 @@ nlu:
     - hi
     - hello
     - good morning
+    - hey there
+    - greetings
+    - hello!
+    - hi there!
+    - good afternoon
+    - yo
+    - what's up?
+    - howdy
+    - nice to see you
+    - hey
+    - hiya
+    - hola
+    - sup
 
 - intent: check_order_status
   examples: |
-    - Where is my order [ORD1234]?
-    - Status of order [5678]
-    - Track order [91011]
+    - Where is my order [ORD1234](order_id)?
+    - Status of order [5678](order_id)
+    - Track order [91011](order_id)
+    - When will order [XYZ789](order_id) arrive?
+    - Can you check the status of [ORDER2023](order_id)?
+    - Has order [ABCD123](order_id) shipped yet?
+    - What's the delivery status for [EFG456](order_id)?
+    - I haven't received [ORDER999](order_id)
+    - Update me on [SHIP123](order_id)
+    - Where's my package [PKG2023](order_id)?
+    - Is [ORDER456](order_id) delayed?
+    - Check status for [98765](order_id)
+    - Order [1234ABC](order_id) tracking info
+    - When will [ORDER-LAST](order_id) be delivered?
+    - Why is [SHIP-ME](order_id) taking so long?
 
 - intent: inquire_product_stock
   examples: |
-    - Is [Mens Cotton Jacket] in stock?
-    - Do you have [Samsung 49-Inch Monitor]?
-    - Stock for [White Gold Plated Princess]
+    - Is [Mens Cotton Jacket](product_name) in stock?
+    - Do you have [Samsung 49-Inch Monitor](product_name)?
+    - Stock for [White Gold Plated Princess](product_name)
+    - Are [Wireless Bluetooth Headphones](product_name) available?
+    - How many [Leather Office Chairs](product_name) do you have?
+    - Is the [USB 3.0 Hub](product_name) restocked yet?
+    - Availability of [4K Action Camera](product_name)?
+    - Do you sell [Ergonomic Keyboard](product_name) here?
+    - Have [Gaming Laptop](product_name) in store?
+    - When will [iPhone Case](product_name) be back in stock?
+    - Is [Smartwatch Series 5](product_name) still available?
+    - How much stock for [Wireless Mouse](product_name)?
+    - Can I buy [Noise-Canceling Headphones](product_name) now?
+    - Are [Yoga Mats](product_name) currently available?
+    - Stock status for [4K TV](product_name)?
 
 - intent: request_return
   examples: |
     - I want to return my order
     - How do I get a refund?
-    - Initiate return for [ORD1234]
+    - Initiate return for [ORD1234](order_id)
+    - Return policy for [ORDER456](order_id)
+    - Need to send back [SHIP789](order_id)
+    - How to process a refund?
+    - Start return process for [PKG2023](order_id)
+    - I received a damaged [product](product_name)
+    - Wrong [item](product_name) delivered
+    - Return [defective product](product_name)
+    - Refund request for [ORDER-LAST](order_id)
+    - How long do returns take?
+    - My [Shoes](product_name) don't fit
+    - Received wrong [T-Shirt](product_name)
+    - Can I exchange [ORDER2023](order_id)?
+    - Return [Damaged Goods](product_name)
+    - Need to return [Broken Headphones](product_name)
+    - Refund for [Incorrect Item](product_name)
+    - How to return [Unwanted Gift](product_name)?
+    - Start return for [ORDER999](order_id)
