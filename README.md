@@ -40,7 +40,7 @@ An AI-powered customer support agent for e-commerce, built with **Rasa** and **F
 - [x] Streamlit UI framework
 - [x] FakeStore API integration
 - [x] Context-aware conversation handling
-- [x] LLM Integration for Reasoning
+- [..] LLM Integration for Reasoning build part(deployment WIP)
 
 ### Immediate Priorities/Work-in-progress Items:
 - [ ] **Database Integration**
