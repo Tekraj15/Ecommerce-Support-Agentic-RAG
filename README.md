@@ -32,6 +32,25 @@ An AI-powered customer support agent for e-commerce, built with **Rasa** and **F
 - **Frontend**: Streamlit with custom CSS design
 - **LLM for Reasoning**: DeepSeek-R1
 
+## 🌐 API Endpoints
+Endpoint	              Method	Description
+/api/orders/{id}	      GET	    Get order status
+/api/returns	          POST	    Initiate return
+/api/products/{id}/stock  GET	    Check product stock
+/webhooks/rest/webhook	  POST	    Rasa chatbot endpoint
+
+## 📈 Workflow
+
+graph TD
+    A[User Query] --> B{Rasa NLU}
+    B -->|Simple Query| C[Predefined Action]
+    B -->|Complex Query| D[DeepSeek-R1]
+    C --> E[Execute API Call]
+    D --> F[Generate Response]
+    E --> G[Update Database]
+    F --> H[Send Response]
+    G --> H
+
 ## 🚧 Roadmap
 
 ### Completed
