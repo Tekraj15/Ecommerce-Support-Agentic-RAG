@@ -16,15 +16,62 @@ An AI-powered customer support agent for e-commerce, built with **Rasa** and **F
 - **Order Tracking**: "Where is my order #123?" → Real-time status from FakeStore API.
 - **Product Stock Checks**: "Is the Fjallraven Backpack in stock?" → Inventory lookup.
 - **Returns/Refunds**: Guided return process via dynamic forms.
+- **RestockNotification**: Notify the customer when the product is back in stock
 - **Rasa Integration**: NLP intents, entity extraction, and dialogue management.
+- **Integrated LLM**: Integrated DeepSeek-R1 for Reasoning i.e. to handle ambiguous queries and generate dynamic responses.
 - **Mock Data**: No need for a real e-commerce backend.
 
 ## Tech Stack 🛠️
 - **NLP & Dialogue**: Rasa (NLU + Core)
-- **Backend**: Python, Flask, SQLite
-- **Integrations**: FakeStore API (mock data)
-- **Deployment**: Docker, Heroku/AWS
-- **Frontend**: Streamlit (optional UI)
+- **Backend**: Python, Flask, PostgreSQL
+- **Integrations**:
+    FakeStore API (mock data),
+    Shopify/Stripe API connections,
+    Gmail/SMTP email automation
+- **Deployment**: Docker, AWS/Heroku
+- **Frontend**: Streamlit with custom CSS design
+- **LLM for Reasoning**: DeepSeek-R1
+
+## 🚧 Roadmap
+
+### Completed
+- [x] Core Rasa/DeepSeek integration
+- [x] Basic order tracking & returns
+- [x] Streamlit UI framework
+- [x] FakeStore API integration
+- [x] Context-aware conversation handling
+- [x] LLM Integration for Reasoning
+
+### Immediate Priorities/Work-in-progress Items:
+- [ ] **Database Integration**
+  - SQLite/PostgreSQL for order history
+  - Redis for real-time session storage
+  - User preference persistence
+
+- [ ] **External Service Integration**
+  - Shopify/Stripe API connections
+  - Gmail/SMTP email automation
+  - Warehouse inventory system hooks
+
+- [ ] **Enhanced Autonomy**
+  - Automated refund processing
+  - Proactive shipment updates
+  - Smart cart recovery workflows
+
+### Advanced Features that are in plan
+- [ ] **Self-Improvement System**
+  - Rasa Interactive Learning integration
+  - Hugging Face Transformers fine-tuning
+  - User feedback analysis pipeline
+
+- [ ] **Production Readiness**
+  - Docker/Kubernetes deployment
+  - Prometheus/Grafana monitoring
+  - Load testing & scaling
+
+### Future Exploration
+- [ ] Have thought of 4 amazing features or further integrations that can be added in the future but I'm not willing to disclose them now. If you're an Interviewer or a product owner, I can definitely share those future scopes in an offline conversation.
+
 
 
 
