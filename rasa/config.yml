@@ -1,0 +1,31 @@
+version: "3.1"
+
+recipe: default.v1
+language: en
+
+pipeline:
+  # Tokenization & Initial Featurization
+  - name: WhitespaceTokenizer
+  - name: RegexFeaturizer
+  - name: LexicalSyntacticFeaturizer
+
+  # Text Representation
+  - name: CountVectorsFeaturizer 
+  - name: CountVectorsFeaturizer
+    analyzer: "char_wb"
+    min_ngram: 1
+    max_ngram: 4
+  
+  # Core NLU Components
+  - name: DIETClassifier
+    epochs: 100
+  - name: EntitySynonymMapper
+  - name: ResponseSelector
+    epochs: 100
+
+policies:
+  - name: RulePolicy
+  - name: MemoizationPolicy
+  - name: TEDPolicy
+    max_history: 5
+    epochs: 100
