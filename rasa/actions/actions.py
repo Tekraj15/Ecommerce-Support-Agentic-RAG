@@ -73,6 +73,7 @@ class ActionGetProductStock(Action):
             dispatcher.utter_message(response_template="utter_stock_check_failed")
             return []
 
+# Autonomous return flow
 class ActionInitiateReturn(Action):
     def name(self) -> Text:
         return "action_initiate_return"
