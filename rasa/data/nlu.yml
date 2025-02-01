@@ -58,13 +58,13 @@ nlu:
 
 - intent: request_return
   examples: |
-    - I want to return my order
-    - How do I get a refund?
-    - Initiate return for [ORD1234](order_id)
+    - I want to [retrun](return) my order
+    - How do I get a [refundd](return)?
+    - Initiate [reutrn](return) for [ORD1234](order_id)
     - Return policy for [ORDER456](order_id)
     - Need to send back [SHIP789](order_id)
     - How to process a refund?
-    - Start return process for [PKG2023](order_id)
+    - Start [retrun](return) process for [PKG2023](order_id)
     - I received a damaged [product](product_name)
     - Wrong [item](product_name) delivered
     - Return [defective product](product_name)
@@ -74,7 +74,7 @@ nlu:
     - Received wrong [T-Shirt](product_name)
     - Can I exchange [ORDER2023](order_id)?
     - Return [Damaged Goods](product_name)
-    - Need to return [Broken Headphones](product_name)
+    - Need to [retrun](return) [Broken Headphones](product_name)
     - Refund for [Incorrect Item](product_name)
-    - How to return [Unwanted Gift](product_name)?
-    - Start return for [ORDER999](order_id)
+    - How to [retrun](return) [Unwanted Gift](product_name)?
+    - Start [retrun](return) for [ORDER999](order_id)
