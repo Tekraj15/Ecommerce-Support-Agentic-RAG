@@ -1,0 +1,23 @@
+# Core
+python==3.9.18
+
+# Rasa Stack
+rasa==3.6.2
+rasa-sdk==3.6.0
+rasa[spacy]==3.6.2
+spacy==3.7.2
+en_core_web_md==3.7.0
+
+# Flask API
+flask==3.0.2
+flask-cors==4.0.0
+flask-jwt-extended==4.5.3
+requests==2.31.0
+redis==5.0.1
+
+# Frontend
+streamlit==1.32.2
+
+# Utils
+python-dotenv==1.0.0
+deepseek-sdk==0.2.1
