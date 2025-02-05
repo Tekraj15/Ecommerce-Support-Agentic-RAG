@@ -43,7 +43,7 @@ An AI-powered customer support agent for e-commerce, built with **Rasa** and **F
 - [x] Context-aware conversation handling
 - [x] LLM Integration for Reasoning build part(deployment WIP)
 - [x] Database Integration:
-  - SQLite/PostgreSQL for order history
+  - PostgreSQL for order history and product return/refund enquiry
   - Redis for real-time session storage
   - User preference persistence
 
