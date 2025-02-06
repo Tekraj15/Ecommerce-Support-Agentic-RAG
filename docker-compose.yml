@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  rasa:
+    image: rasa/rasa:3.6.2-full
+    ports:
+      - "5005:5005"
+    volumes:
+      - ./rasa:/app
+    command:
+      - run
+      - --enable-api
+      - --cors
+      - "*"
+      - --debug
+    depends_on:
+      - redis
+      - actions
+    environment:
+      - RASA_ACTIONS_URL=http://actions:5055/webhook
+      - REDIS_HOST=redis
+
+  actions:
+    image: rasa/rasa-sdk:3.6.0
+    ports:
+      - "5055:5055"
+    volumes:
+      - ./rasa/actions:/app/actions
+    depends_on:
+      - flask-api
+    environment:
+      - FLASK_API_URL=http://flask-api:5000
+
+  flask-api:
+    build: ./api
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  streamlit:
+    build: ./frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - FLASK_API_URL=http://flask-api:5000
+    depends_on:
+      - flask-api
+
+volumes:
+  redis_data:
