@@ -1,6 +1,3 @@
-# Core
-python==3.9.18
-
 # Rasa Stack
 rasa==3.6.2
 rasa-sdk==3.6.0
