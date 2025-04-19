@@ -70,6 +70,9 @@ An AI-powered customer support agent for e-commerce, built with **Rasa** and **F
   - Prometheus/Grafana monitoring
   - Load testing & scaling
 
+  ### Authentication Flow Design
+![Authentication Flow Design](https://github.com/user-attachments/assets/c9ce50e7-a0e0-43ee-93c1-9813a1f9628f)
+
 ### Future Exploration
 - [ ] Have thought of 4 amazing features or further integrations that can be added in the future but I'm not willing to disclose them now. If you're an Interviewer or a product owner, I can definitely share those future scopes in an offline conversation.
 
