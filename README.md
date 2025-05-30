@@ -1,4 +1,4 @@
-# 🤖 E-Commerce Customer Support AI Agent(from scratch - no Agentic AI frameworks)
+# 🤖 E-Commerce Customer Support AI Agent (from scratch - no AI Agent frameworks)
 
 This repository contains the source code and project structure for a modular, scalable E-Commerce Customer Support AI Agent. The agent is designed to provide intelligent, automated support for customers and can integrate with various APIs and tools for seamless functionality.
 
