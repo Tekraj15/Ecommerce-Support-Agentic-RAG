@@ -18,7 +18,7 @@ An AI-powered customer support agent for e-commerce, built with **Rasa** and **F
 - **Returns/Refunds**: Guided return process via dynamic forms.
 - **RestockNotification**: Notify the customer when the product is back in stock
 - **Rasa Integration**: NLP intents, entity extraction, and dialogue management.
-- **Integrated LLM**: Integrated DeepSeek-R1 for Reasoning i.e. to handle ambiguous queries and generate dynamic responses.
+- **Integrated LLM**: Integrated DeepSeek-R1 for Reasoning i.e., to handle ambiguous queries and generate dynamic responses.
 - **Mock Data**: No need for a real e-commerce backend.
 
 ## Tech Stack 🛠️
@@ -64,6 +64,7 @@ An AI-powered customer support agent for e-commerce, built with **Rasa** and **F
   - Rasa Interactive Learning integration
   - Hugging Face Transformers fine-tuning
   - User feedback analysis pipeline
+  - RAG integration
 
 - [ ] **Production Readiness**
   - Docker/Kubernetes deployment
