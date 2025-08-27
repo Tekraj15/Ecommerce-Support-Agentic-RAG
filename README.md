@@ -1,4 +1,4 @@
-# 🤖 E-Commerce Customer Support AI Agent (from scratch - no AI Agent frameworks)
+# E-Commerce Customer Support AI Agent (from scratch - no AI Agent frameworks)
 
 This repository contains the source code and project structure for a modular, scalable E-Commerce Customer Support AI Agent. The agent is designed to provide intelligent, automated support for customers and can integrate with various APIs and tools for seamless functionality.
 
@@ -18,7 +18,7 @@ An AI-powered customer support agent for e-commerce, built with **Rasa** and **F
 - **Returns/Refunds**: Guided return process via dynamic forms.
 - **RestockNotification**: Notify the customer when the product is back in stock
 - **Rasa Integration**: NLP intents, entity extraction, and dialogue management.
-- **Integrated LLM**: Integrated DeepSeek-R1 for Reasoning i.e., to handle ambiguous queries and generate dynamic responses.
+- **Integrated LLM**: Integrated DeepSeek-R1 for Reasoning, i.e., to handle ambiguous queries and generate dynamic responses.
 - **Mock Data**: No need for a real e-commerce backend.
 
 ## Tech Stack 🛠️
@@ -49,6 +49,19 @@ An AI-powered customer support agent for e-commerce, built with **Rasa** and **F
 
 ### Immediate Priorities/Work-in-progress Items:
 
+
+- [ ] ** RAG Core System:
+    - Document processing + vector store
+    - Basic Retrieval: Product specs and policy documents
+    - Fallback Mechanism: When RAG doesn't find relevant info
+
+
+### Advanced Features that are in plan
+- [ ] **Self-Improvement System (Part of Long-term Optimization)**
+  - Rasa Interactive Learning integration
+  - Hugging Face Transformers fine-tuning
+  - User feedback analysis pipeline
+
 - [ ] **External Service Integration**
   - Shopify/Stripe API connections
   - Gmail/SMTP email automation
@@ -59,13 +72,6 @@ An AI-powered customer support agent for e-commerce, built with **Rasa** and **F
   - Proactive shipment updates
   - Smart cart recovery workflows
 
-### Advanced Features that are in plan
-- [ ] **Self-Improvement System**
-  - Rasa Interactive Learning integration
-  - Hugging Face Transformers fine-tuning
-  - User feedback analysis pipeline
-  - RAG integration
-
 - [ ] **Production Readiness**
   - Docker/Kubernetes deployment
   - Prometheus/Grafana monitoring
@@ -74,8 +80,12 @@ An AI-powered customer support agent for e-commerce, built with **Rasa** and **F
   ### Authentication Flow Design
 ![Authentication Flow Design](https://github.com/user-attachments/assets/c9ce50e7-a0e0-43ee-93c1-9813a1f9628f)
 
+### System Design Architecture:
+<img width="3840" height="2095" alt="E-commerce AI Agent Arch " src="https://github.com/user-attachments/assets/d510630b-4f46-4847-a1bf-6f4f7e87d8cd" />
+
+
 ### Future Exploration
-- [ ] Have thought of 4 amazing features or further integrations that can be added in the future but I'm not willing to disclose them now. If you're an Interviewer or a product owner, I can definitely share those future scopes in an offline conversation.
+- [ ] Have thought of 4 amazing features or further integrations that can be integrated in the future, but I'm not willing to disclose them now. If you're an Interviewer or a product owner, I would love to share those future scopes in an offline conversation.
 
 
 
