@@ -6,9 +6,25 @@ This repository contains the source code and project structure for a modular, sc
 [![Rasa](https://img.shields.io/badge/Rasa-3.x-orange)](https://rasa.com/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
-An AI-powered customer support agent for e-commerce, built with **Rasa** and **FakeStore API**. Handles order tracking, product inquiries, and returns, with seamless integration for mock data.
+# Introduction
+An AI-powered customer support agentic RAG for e-commerce, built with **Rasa** and **FakeStore API** as chatbot framework and e-commerce API respectively. Handles order tracking, product inquiries, and returns, with seamless integration for mock data.
 
-**Live Demo** (Not Ready Yet): 
+
+# Why Agentic RAG for Medical Chatbot?
+
+Current Limitations:
+- Static Retrieval: One-and-done knowledge fetching
+- No Reasoning: Cannot chain multiple retrievals for complex queries
+- Limited Validation: Basic safety checks but no iterative verification
+- Passive Architecture: Doesn't adapt retrieval strategy to query complexity
+
+Agentic RAG Advantages:
+- Multi-hop Reasoning: "What's the best medication for hypertension in elderly patients with diabetes?"
+- Self-Correction: Detects insufficient information and requeries
+- Dynamic Source Selection: Chooses between KB, APIs, or vector search based on context
+- Verification Loops: Cross-references multiple sources for critical information
+
+**Live Demo** (WIP): 
 
 ![Demo](demo.gif) <!-- Add a GIF later -->
 
