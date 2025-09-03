@@ -7,28 +7,32 @@ This repository contains the source code and project structure for a modular, sc
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 # Introduction
-An AI-powered customer support agentic RAG for e-commerce, built with **Rasa** and **FakeStore API** as chatbot framework and e-commerce API respectively. Handles order tracking, product inquiries, and returns, with seamless integration for mock data.
+An AI-powered customer support agentic RAG for e-commerce, built with **Rasa** and **FakeStore API** as chatbot framework and e-commerce API respectively. It handles order tracking, product inquiries(as customer support bot), and order returns, with seamless integration for mock data.
+
+What is Agentic RAG?
+Agentic RAG transforms passive retrieval into active, multi-step reasoning where the system:
+- Autonomously decides what information to retrieve
+- Plans multi-hop queries across knowledge sources
+- Self-corrects and iteratively refines searches
+- Uses tools (calculators, APIs, databases) to enhance responses
 
 
-# Why Agentic RAG for Medical Chatbot?
+# Why Agentic RAG for E-Commerce Support AI?
 
-Current Limitations:
-- Static Retrieval: One-and-done knowledge fetching
-- No Reasoning: Cannot chain multiple retrievals for complex queries
-- Limited Validation: Basic safety checks but no iterative verification
-- Passive Architecture: Doesn't adapt retrieval strategy to query complexity
+Current Limitations
+- Traditional RAG: Single-pass retrieval -> limited context
+- Static responses -> no dynamic problem-solving
+- No cross-document reasoning
 
-Agentic RAG Advantages:
-- Multi-hop Reasoning: "What's the best medication for hypertension in elderly patients with diabetes?"
-- Self-Correction: Detects insufficient information and requeries
-- Dynamic Source Selection: Chooses between KB, APIs, or vector search based on context
-- Verification Loops: Cross-references multiple sources for critical information
+Agentic RAG Advantages
+- Complex Query Handling: "Find me a laptop under $1000 that's better than my current Dell XPS 13"
+- Multi-Step Reasoning: Check specs → compare prices → verify compatibility → suggest alternatives
+- Self-Correction: "That didn't work, let me try a different approach"
+- Tool Usage: Calculate discounts, check inventory, estimate shipping
 
-**Live Demo** (WIP): 
+**Live Demo** (WIP):
 
-![Demo](demo.gif) <!-- Add a GIF later -->
-
-## Features ✨
+## Features
 - **Order Tracking**: "Where is my order #123?" → Real-time status from FakeStore API.
 - **Product Stock Checks**: "Is the Fjallraven Backpack in stock?" → Inventory lookup.
 - **Returns/Refunds**: Guided return process via dynamic forms.
@@ -37,19 +41,21 @@ Agentic RAG Advantages:
 - **Integrated LLM**: Integrated DeepSeek-R1 for Reasoning, i.e., to handle ambiguous queries and generate dynamic responses.
 - **Mock Data**: No need for a real e-commerce backend.
 
-## Tech Stack 🛠️
+## Tech Stack
 - **NLP & Dialogue**: Rasa (NLU + Core)
 - **Backend**: Python, Flask, PostgreSQL
 - **Integrations**:
     FakeStore API (mock data),
-    Shopify/Stripe API connections,
-    Gmail/SMTP email automation
+    Shopify/Stripe API connections(Future Work)
+    Gmail/SMTP email automation(Future Work)
 - **Deployment**: Docker, AWS/Heroku
 - **Frontend**: Streamlit with custom CSS design
 - **LLM for Reasoning**: DeepSeek-R1
+- **Vector Database**: Pinecone
 
 
-## 🚧 Roadmap
+
+## Roadmap/Milestones
 
 ### Completed
 - [x] Core Rasa/DeepSeek integration
@@ -63,13 +69,14 @@ Agentic RAG Advantages:
   - Redis for real-time session storage
   - User preference persistence
 
-### Immediate Priorities/Work-in-progress Items:
+### Work-in-progress Items:
 
 
 - [ ] ** RAG Core System:
     - Document processing + vector store
     - Basic Retrieval: Product specs and policy documents
     - Fallback Mechanism: When RAG doesn't find relevant info
+    - Agentic RAG: To add by adding decision-making capabilities to it's own search refinement.
 
 
 ### Advanced Features that are in plan
