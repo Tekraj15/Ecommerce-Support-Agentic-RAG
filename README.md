@@ -32,9 +32,7 @@ Agentic RAG Advantages
 
 **Live Demo** (WIP):
 
-![Demo](demo.gif)
-
-## Features ✨
+## Features
 - **Order Tracking**: "Where is my order #123?" → Real-time status from FakeStore API.
 - **Product Stock Checks**: "Is the Fjallraven Backpack in stock?" → Inventory lookup.
 - **Returns/Refunds**: Guided return process via dynamic forms.
@@ -43,19 +41,21 @@ Agentic RAG Advantages
 - **Integrated LLM**: Integrated DeepSeek-R1 for Reasoning, i.e., to handle ambiguous queries and generate dynamic responses.
 - **Mock Data**: No need for a real e-commerce backend.
 
-## Tech Stack 🛠️
+## Tech Stack
 - **NLP & Dialogue**: Rasa (NLU + Core)
 - **Backend**: Python, Flask, PostgreSQL
 - **Integrations**:
     FakeStore API (mock data),
-    Shopify/Stripe API connections,
-    Gmail/SMTP email automation
+    Shopify/Stripe API connections(Future Work)
+    Gmail/SMTP email automation(Future Work)
 - **Deployment**: Docker, AWS/Heroku
 - **Frontend**: Streamlit with custom CSS design
 - **LLM for Reasoning**: DeepSeek-R1
+- **Vector Database**: Pinecone
 
 
-## 🚧 Roadmap
+
+## Roadmap/Milestones
 
 ### Completed
 - [x] Core Rasa/DeepSeek integration
@@ -69,13 +69,14 @@ Agentic RAG Advantages
   - Redis for real-time session storage
   - User preference persistence
 
-### Immediate Priorities/Work-in-progress Items:
+### Work-in-progress Items:
 
 
 - [ ] ** RAG Core System:
     - Document processing + vector store
     - Basic Retrieval: Product specs and policy documents
     - Fallback Mechanism: When RAG doesn't find relevant info
+    - Agentic RAG: To add by adding decision-making capabilities to it's own search refinement.
 
 
 ### Advanced Features that are in plan
