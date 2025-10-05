@@ -68,13 +68,14 @@ Agentic RAG Advantages
   - PostgreSQL for order history and product return/refund enquiry
   - Redis for real-time session storage
   - User preference persistence
+- [x] Core RAG System:
+    - Document processing + vector store
+    - RAG Ingestion Pipeline: Loader and Chunker
 
 ### Work-in-progress Items:
 
 
-- [ ] ** RAG Core System:
-    - Document processing + vector store
-    - RAG Ingestion Pipeline
+- [ ] ** RAG
     - Basic Retrieval: Product specs and policy documents
     - Fallback Mechanism: When RAG doesn't find relevant info
     - Agentic RAG: To add by adding decision-making capabilities to its own search refinement.
@@ -108,7 +109,13 @@ Agentic RAG Advantages
 Here's the Modular Agentic RAG System Architecture that pairs OpenAI's embeddings model "text-embedding-3-large" with DeepSeek-R1 for generation in this RAG pipeline.
 - OpenAI is used solely for embeddings and hypothetical generation in HyDE (via ChatOpenAI for the zero-shot doc creation).
 - The pipeline then switches to DeepSeek-R1 (via a compatible wrapper like ChatDeepSeek or a custom integration) for the final augmentation and response generation.
+
 This leverages the strengths of both: OpenAI's superior embedding quality for retrieval (with HyDE boosting relevance on challenging queries), and DeepSeek's cost efficiency for high-volume generation.
+
+
+To go deeper into the detailed Architecture, the Agentic RAG architecture is equipped with below techniques/capabilities:
+1. HyDE (Hypothetical Document Embeddings)
+   Queries are often short and vague, while documents are detailed—HyDE flips this by using an LLM to "imagine" a full, ideal answer (hypothetical document) and retrieves real docs matching that, like searching with a prototype instead of a sketch.
 
 <img width="3840" height="3715" alt="updated_Architecture_RAG " src="https://github.com/user-attachments/assets/8a3b43ae-ced8-44a0-ae01-3dbfea85f2ed" />
 
