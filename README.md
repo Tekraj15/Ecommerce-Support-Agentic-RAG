@@ -7,7 +7,7 @@ This repository contains the source code and project structure for a modular, sc
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 # Introduction
-An AI-powered customer support agentic RAG for e-commerce, built with **Rasa** and **FakeStore API** as chatbot framework and e-commerce API respectively. It handles order tracking, product inquiries(as customer support bot), and order returns, with seamless integration for mock data.
+An AI-powered customer support agentic RAG for e-commerce, built with **Rasa** and **FakeStore API** as chatbot framework and e-commerce API, respectively. It handles order tracking, product inquiries(as a customer support bot), and order returns, with seamless integration for mock data.
 
 What is Agentic RAG?
 Agentic RAG transforms passive retrieval into active, multi-step reasoning where the system:
@@ -27,7 +27,7 @@ Current Limitations
 Agentic RAG Advantages
 - Complex Query Handling: "Find me a laptop under $1000 that's better than my current Dell XPS 13"
 - Multi-Step Reasoning: Check specs → compare prices → verify compatibility → suggest alternatives
-- Self-Correction: "That didn't work, let me try a different approach"
+- Self-Correction: "That didn't work, let me try a different approach."
 - Tool Usage: Calculate discounts, check inventory, estimate shipping
 
 **Live Demo** (WIP):
@@ -68,15 +68,17 @@ Agentic RAG Advantages
   - PostgreSQL for order history and product return/refund enquiry
   - Redis for real-time session storage
   - User preference persistence
+- [x] Core RAG System:
+    - Document processing + vector store
+    - RAG Ingestion Pipeline: Loader and Chunker
 
 ### Work-in-progress Items:
 
 
-- [ ] ** RAG Core System:
-    - Document processing + vector store
+- [ ] ** RAG
     - Basic Retrieval: Product specs and policy documents
     - Fallback Mechanism: When RAG doesn't find relevant info
-    - Agentic RAG: To add by adding decision-making capabilities to it's own search refinement.
+    - Agentic RAG: To add by adding decision-making capabilities to its own search refinement.
 
 
 ### Advanced Features that are in plan
@@ -104,11 +106,19 @@ Agentic RAG Advantages
 ![Authentication Flow Design](https://github.com/user-attachments/assets/c9ce50e7-a0e0-43ee-93c1-9813a1f9628f)
 
 ### System Design Architecture:
-<img width="3840" height="2095" alt="E-commerce AI Agent Arch " src="https://github.com/user-attachments/assets/d510630b-4f46-4847-a1bf-6f4f7e87d8cd" />
+Here's the Modular Agentic RAG System Architecture that pairs OpenAI's embeddings model "text-embedding-3-large" with DeepSeek-R1 for generation in this RAG pipeline.
+- OpenAI is used solely for embeddings and hypothetical generation in HyDE (via ChatOpenAI for the zero-shot doc creation).
+- The pipeline then switches to DeepSeek-R1 (via a compatible wrapper like ChatDeepSeek or a custom integration) for the final augmentation and response generation.
+
+This leverages the strengths of both: OpenAI's superior embedding quality for retrieval (with HyDE boosting relevance on challenging queries), and DeepSeek's cost efficiency for high-volume generation.
 
 
-### Future Exploration
-- [ ] Have thought of 4 amazing features or further integrations that can be integrated in the future, but I'm not willing to disclose them now. If you're an Interviewer or a product owner, I would love to share those future scopes in an offline conversation.
+To go deeper into the detailed Architecture, the Agentic RAG architecture is equipped with below techniques/capabilities:
+1. HyDE (Hypothetical Document Embeddings)
+   Queries are often short and vague, while documents are detailed—HyDE flips this by using an LLM to "imagine" a full, ideal answer (hypothetical document) and retrieves real docs matching that, like searching with a prototype instead of a sketch.
+
+<img width="3840" height="3715" alt="updated_Architecture_RAG " src="https://github.com/user-attachments/assets/8a3b43ae-ced8-44a0-ae01-3dbfea85f2ed" />
+
 
 
 
