@@ -1,4 +1,4 @@
-# E-Commerce Customer Support Agentic RAG (from scratch)
+# E-Commerce Customer Support Agentic RAG
 
 This repository contains the source code and project structure for a modular, scalable E-Commerce Customer Support AI Agent. The agent is designed to provide intelligent, automated support for customers and can integrate with various APIs and tools for seamless functionality.
 
@@ -105,11 +105,4 @@ Agentic RAG Advantages
 
 ### System Design Architecture:
 <img width="3840" height="2095" alt="E-commerce AI Agent Arch " src="https://github.com/user-attachments/assets/d510630b-4f46-4847-a1bf-6f4f7e87d8cd" />
-
-
-### Future Exploration
-- [ ] Have thought of 4 amazing features or further integrations that can be integrated in the future, but I'm not willing to disclose them now. If you're an Interviewer or a product owner, I would love to share those future scopes in an offline conversation.
-
-
-
 
