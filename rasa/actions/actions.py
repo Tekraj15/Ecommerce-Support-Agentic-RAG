@@ -233,3 +233,24 @@ class ActionOfferRestockNotification(Action):
             buttons=buttons
         )
         return []
+
+class ActionRagQuery(Action):
+    def name(self) -> Text:
+        return "action_rag_query"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        user_query = tracker.latest_message.get("text", "")
+        payload = {"query": user_query, "top_k": 3, "use_hyde": False}
+        try:
+            response = requests.post("http://localhost:8000/rag/query", json=payload, timeout=10)
+            results = response.json().get("results", [])
+            if results:
+                snippets = "\n".join([r.get("text", "") for r in results])
+                dispatcher.utter_message(text=f"Relevant info:\n{snippets}")
+            else:
+                dispatcher.utter_message(text="No relevant info found.")
+        except Exception as e:
+            dispatcher.utter_message(text=f"Error querying RAG service: {e}")
+        return []
