@@ -22,7 +22,6 @@ python-dotenv>=1.0.0,<2.0.0
 flask==2.2.2
 flask-cors==4.0.0
 flask-jwt-extended==4.4.4
-requests==2.28.1
 redis==4.5.4
 
 # PostgreSQL
@@ -43,24 +42,17 @@ tqdm>=4.66.0,<5.0.0  # For training progress bars
 # Explicitly include boto3 to fix error
 boto3>=1.28.0
 
-# Other dependencies (unchanged)
+# Streamlit for web app
 streamlit==1.32.2
 python-dotenv==1.0.0
-openai>=1.0.0,<2.0.0
-deepseek-sdk==0.1.0
-
-# RAG & Agentic dependencies
-langchain>=0.1.0
-pypdf>=3.9.0
-pinecone-client>=2.2.4
 
 # Spacy Language Model (English)
 #python -m spacy download en_core_web_md
 https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.7.0/en_core_web_md-3.7.0-py3-none-any.whl
 
-# RAG & Agentic dependencies
-langchain>=0.1.0
+# LLM, RAG & Agentic dependencies
+openai>=1.0.0,<2.0.0
+deepseek-sdk==0.1.0
+langchain>=0.1.20
 pypdf>=3.9.0
 pinecone-client>=2.2.4
-
-
