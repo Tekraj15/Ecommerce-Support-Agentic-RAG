@@ -118,7 +118,108 @@ To go deeper into the detailed Architecture, the Agentic RAG architecture is equ
 1. HyDE (Hypothetical Document Embeddings)
    Queries are often short and vague, while documents are detailed—HyDE flips this by using an LLM to "imagine" a full, ideal answer (hypothetical document) and retrieves real docs matching that, like searching with a prototype instead of a sketch.
 
-<img width="3840" height="3715" alt="updated_Architecture_RAG " src="https://github.com/user-attachments/assets/8a3b43ae-ced8-44a0-ae01-3dbfea85f2ed" />
+```mermaid
+graph TB
+    %% User Interface Layer
+    UI[User Interface<br/>Streamlit Web App]
+    
+    %% Core AI Layer
+    subgraph "AI Agent Core"
+        RASA[Rasa NLU Engine]
+        ROUTER[Agent Router<br/>Query Classifier]
+        FALLBACK[Fallback Handler<br/>Human Escalation]
+    end
+    
+    %% Multi-Model Agentic RAG Service
+    subgraph "Multi-Model Agentic RAG Service"
+        AP[Agentic Planner<br/>Query Decomposition]
+        AE[Agentic Executor<br/>Tool Orchestration]
+        
+        subgraph "Embedding & HyDE Layer"
+            OEMB[OpenAI Embeddings<br/>text-embedding-3-large]
+            HYDE[HyDE Generator<br/>ChatOpenAI]
+            VS[Vector Store<br/>OpenAI Embeddings]
+        end
+        
+        subgraph "Generation Layer"
+            DSGEN[DeepSeek-R1<br/>Response Generation]
+            AUG[RAG Augmenter<br/>Context + Query]
+        end
+        
+        TOOLS[Tool Registry<br/>Calculator, Inventory, etc.]
+        
+        AP --> AE
+        AE --> HYDE
+        HYDE --> OEMB
+        OEMB --> VS
+        AE --> VS
+        VS --> AUG
+        AUG --> DSGEN
+        AE --> TOOLS
+    end
+    
+    %% Data Ingestion Pipeline
+    subgraph "Data Ingestion Service"
+        DI[Document Ingestor<br/>PDF/CSV/JSON]
+        DP[Document Processor<br/>OpenAI Embeddings]
+        QC[Quality Controller<br/>Validation]
+        
+        DI --> DP
+        DP --> OEMB
+        OEMB --> QC
+        QC --> VS
+    end
+    
+    %% External Services
+    subgraph "External APIs"
+        FS[FakeStore API]
+        DB[PostgreSQL Database]
+        REDIS[Redis Session Store]
+        OPENAI[OpenAI API<br/>Embeddings + HyDE]
+        DEEPSEEK[DeepSeek API<br/>Generation]
+        HUMAN[Human Operator Interface]
+    end
+    
+    %% Action Servers
+    subgraph "Action Servers"
+        CUSTOM[Custom Actions<br/>Order/Returns]
+        AGENTIC[Agentic Actions<br/>Complex Queries]
+    end
+    
+    %% Data Flow
+    UI --> RASA
+    RASA --> ROUTER
+    
+    ROUTER -->|Simple Query| CUSTOM
+    ROUTER -->|Complex Query| AGENTIC
+    ROUTER -->|Fallback| FALLBACK
+    
+    AGENTIC --> AP
+    CUSTOM --> FS
+    CUSTOM --> DB
+    CUSTOM --> REDIS
+    
+    FALLBACK --> HUMAN
+    
+    %% API Connections
+    OEMB --> OPENAI
+    HYDE --> OPENAI
+    DSGEN --> DEEPSEEK
+    
+    %% Style
+    classDef default fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
+    classDef agentic fill:#fff3e0,stroke:#ff6f00,stroke-width:2px;
+    classDef embedding fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
+    classDef generation fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px;
+    classDef ingestion fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px;
+    classDef external fill:#ffebee,stroke:#c62828,stroke-width:2px;
+    
+    class AP,AE,TOOLS,AGENTIC agentic;
+    class OEMB,HYDE,VS embedding;
+    class DSGEN,AUG generation;
+    class DI,DP,QC ingestion;
+    class FS,DB,REDIS,OPENAI,DEEPSEEK,HUMAN external;
+    ```
 
 
 
