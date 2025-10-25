@@ -1,38 +1,34 @@
 """
-Chunker for semantic/sliding window chunking of documents.
+Chunker for semantic/sliding window chunking of documents using LangChain.
 """
 from typing import List, Dict, Any
-import math
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 class DocumentChunker:
-    def __init__(self, chunk_size: int = 512, overlap: int = 50):
-        self.chunk_size = chunk_size
-        self.overlap = overlap
+    def __init__(self, chunk_size: int = 512, chunk_overlap: int = 50):
+        self.splitter = RecursiveCharacterTextSplitter(
+            chunk_size=chunk_size,
+            chunk_overlap=chunk_overlap,
+            separators=["\n\n", "\n", " ", ""],  # Semantic separators: paragraphs, lines, sentences, words
+            keep_separator=True
+        )
 
     def chunk_text(self, text: str) -> List[str]:
-        """Chunk text using sliding window."""
-        chunks = []
-        start = 0
-        text_length = len(text)
-        while start < text_length:
-            end = min(start + self.chunk_size, text_length)
-            chunk = text[start:end]
-            chunks.append(chunk)
-            if end == text_length:
-                break
-            start += self.chunk_size - self.overlap
-        return chunks
+        """Chunk text semantically with overlap."""
+        return self.splitter.split_text(text)
 
-    def chunk_docs(self, docs: List[str]) -> List[Dict[str, Any]]:
+    def chunk_docs(self, docs: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Chunk multiple docs and add metadata."""
         chunked = []
         for idx, doc in enumerate(docs):
-            chunks = self.chunk_text(doc)
+            chunks = self.chunk_text(doc["text"])
             for i, chunk in enumerate(chunks):
                 chunked.append({
-                    "doc_id": idx,
+                    "doc_id": doc.get("doc_id", idx),
                     "chunk_id": i,
                     "text": chunk,
-                    "total_chunks": len(chunks)
+                    "total_chunks": len(chunks),
+                    "source": doc.get("source", "unknown"),
+                    "metadata": doc.get("metadata", {})
                 })
         return chunked
