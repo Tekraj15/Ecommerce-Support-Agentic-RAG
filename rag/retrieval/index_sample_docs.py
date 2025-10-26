@@ -8,9 +8,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Example usage
 if __name__ == "__main__":
-    source_dir = "data/documents"  # Adjust to your e-commerce data path
+    source_dir = "data/documents/raw"  #e-commerce data path for RAG ingesiton
     loader = DocumentLoader(source_dir=source_dir)
     docs = loader.load_json() + loader.load_pdf() + loader.load_csv()
     chunker = DocumentChunker(chunk_size=512, chunk_overlap=50)
@@ -22,7 +21,7 @@ if __name__ == "__main__":
         chunk["metadata"] = {"source": chunk.get("source", "ecommerce_doc")}
 
     # Index to Pinecone (or InMemory as fallback)
-    store = PineconeVectorStore(index_name="ecommerce-rag")  # Or InMemoryVectorStore()
+    store = PineconeVectorStore(index_name="ecommerce-rag")  # Replaced the InMemoryVectorStore() as it's inefficient for large data.
     store.add_documents(chunks)
     print(f"Indexed {len(chunks)} chunks.")
 
