@@ -238,16 +238,20 @@ class ActionRagQuery(Action):
     def name(self) -> Text:
         return "action_rag_query"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         user_query = tracker.latest_message.get("text", "")
-        payload = {"query": user_query, "top_k": 3, "use_hyde": False}
+        payload = {
+            "query": user_query,
+            "top_k": 3,
+            "use_hyde": True,  # Enable HyDE for better retrieval
+            "use_mmr": True,   # Enable MMR for diversity
+            "use_rerank": True # Enable Cohere rerank for precision
+        }
         try:
             response = requests.post("http://localhost:8000/rag/query", json=payload, timeout=10)
             results = response.json().get("results", [])
             if results:
-                snippets = "\n".join([r.get("text", "") for r in results])
+                snippets = "\n".join([f"{r.get('text', '')} (Source: {r.get('metadata', {}).get('source', 'N/A')})" for r in results])
                 dispatcher.utter_message(text=f"Relevant info:\n{snippets}")
             else:
                 dispatcher.utter_message(text="No relevant info found.")
