@@ -1,6 +1,14 @@
 from flask import Blueprint, jsonify, request
 from app.services.order_service import get_order_status
 from app.services.product_service import get_product_stock
+from rag.retrieval.vector_store import PineconeVectorStore
+from rag.retrieval.retriever import Retriever
+from langchain_openai import OpenAIEmbeddings
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 api_blueprint = Blueprint('api', __name__)
 
@@ -17,27 +25,25 @@ def product_stock(product_name):
     return jsonify({"product_name": product_name, "stock": stock})
 
 # --- FastAPI RAG endpoint ---
-try:
-    from fastapi import APIRouter
-    from pydantic import BaseModel
-    from rag.retrieval.vector_store import InMemoryVectorStore
-    from rag.retrieval.retriever import Retriever
+@api_blueprint.route('/rag/query', methods=['POST'])
+def rag_query():
+    """Get RAG results for a query"""
+    data = request.get_json()
+    if not data or "query" not in data:
+        return jsonify({"error": "Query is required"}), 400
 
-    router = APIRouter()
+    query = data["query"]
+    top_k = data.get("top_k", 5)
 
-    class QueryRequest(BaseModel):
-        query: str
-        top_k: int = 3
-        use_hyde: bool = False
+    # Initialize RAG components
+    vector_store = PineconeVectorStore(index_name="ecommerce-rag")
+    embedder = OpenAIEmbeddings(model="text-embedding-3-large", api_key=os.getenv("OPENAI_API_KEY"))
+    rerank_fn = None 
+    retriever = Retriever(vector_store, embedder, rerank_fn=rerank_fn)
 
-    # Dummy store and retriever for demo
-    store = InMemoryVectorStore()
-    embed_fn = lambda x: [1.0]*10
-    retriever = Retriever(vector_store=store, embed_fn=embed_fn)
-
-    @router.post("/rag/query")
-    async def rag_query(request: QueryRequest):
-        results = retriever.retrieve(request.query, top_k=request.top_k, use_hyde=request.use_hyde)
-        return {"results": results}
-except ImportError:
-    pass
+    try:
+        results = retriever.retrieve(query, top_k)
+        formatted_results = [{"text": r["text"], "metadata": r["metadata"]} for r in results]
+        return jsonify({"results": formatted_results})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
