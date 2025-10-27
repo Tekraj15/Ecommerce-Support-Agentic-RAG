@@ -4,6 +4,7 @@ from app.services.product_service import get_product_stock
 from rag.retrieval.vector_store import PineconeVectorStore
 from rag.retrieval.retriever import Retriever
 from langchain_openai import OpenAIEmbeddings
+from langchain.retrievers.document_compressors import CohereRerank
 import os
 from dotenv import load_dotenv
 
@@ -34,6 +35,9 @@ def rag_query():
 
     query = data["query"]
     top_k = data.get("top_k", 5)
+    use_hyde = data.get("use_hyde", False)
+    use_mmr = data.get("use_mmr", False)
+    use_rerank = data.get("use_rerank", False)
 
     # Initialize RAG components
     vector_store = PineconeVectorStore(index_name="ecommerce-rag")
@@ -42,7 +46,7 @@ def rag_query():
     retriever = Retriever(vector_store, embedder, rerank_fn=rerank_fn)
 
     try:
-        results = retriever.retrieve(query, top_k)
+        results = retriever.retrieve(query, top_k, use_hyde, use_mmr, use_rerank)
         formatted_results = [{"text": r["text"], "metadata": r["metadata"]} for r in results]
         return jsonify({"results": formatted_results})
     except Exception as e:
