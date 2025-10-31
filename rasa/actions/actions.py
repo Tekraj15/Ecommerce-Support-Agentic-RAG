@@ -5,6 +5,7 @@ from rasa_sdk.events import SlotSet, FollowupAction
 import requests
 from openai import OpenAI
 import logging
+import os
 from datetime import datetime
 
 # Configure logging
@@ -150,7 +151,7 @@ class ActionHandleComplexQuery(Action):
         try:
             client = OpenAI(
                 base_url="https://api.deepseek.com/v1",
-                api_key="YOUR_DEEPSEEK_API_KEY"
+                api_key=os.getenv("DEEPSEEK_API_KEY")
             )
 
             response = client.chat.completions.create(
@@ -238,23 +239,39 @@ class ActionRagQuery(Action):
     def name(self) -> Text:
         return "action_rag_query"
 
-    def run(self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        user_query = tracker.latest_message.get("text", "")
-        payload = {
-            "query": user_query,
-            "top_k": 3,
-            "use_hyde": True,  # Enable HyDE for better retrieval
-            "use_mmr": True,   # Enable MMR for diversity
-            "use_rerank": True # Enable Cohere rerank for precision
-        }
+    def run(self, dispatcher, tracker, domain):
+        query = tracker.latest_message.get("text", "")
+        payload = {"query": query}
+
         try:
-            response = requests.post("http://localhost:8000/rag/query", json=payload, timeout=10)
-            results = response.json().get("results", [])
-            if results:
-                snippets = "\n".join([f"{r.get('text', '')} (Source: {r.get('metadata', {}).get('source', 'N/A')})" for r in results])
-                dispatcher.utter_message(text=f"Relevant info:\n{snippets}")
-            else:
-                dispatcher.utter_message(text="No relevant info found.")
+            response = requests.post(
+                "http://localhost:8000/rag/query",
+                json=payload,
+                timeout=15
+            )
+            response.raise_for_status()
+            data = response.json()
+
+            answer = data.get("answer", "No answer.")
+            sources = data.get("sources", [])
+            
+            # Adding toll calling info
+            tool_calls = data.get("tool_calls", [])
+            confidence = data.get("confidence", 0.0)
+
+            msg = f"{answer}\n\nConfidence: {confidence:.2f}"
+            if sources:
+                src_list = ", ".join([s["source"] for s in sources])
+                msg += f"\nSources: {src_list}"
+            if tool_calls:
+                tools = ", ".join([t["tool"] for t in tool_calls])
+                msg += f"\nTools used: {tools}"
+
+            dispatcher.utter_message(text=msg)
+
+        except requests.exceptions.RequestException as e:
+            dispatcher.utter_message(text=f"RAG service unavailable: {e}")
         except Exception as e:
-            dispatcher.utter_message(text=f"Error querying RAG service: {e}")
+            dispatcher.utter_message(text=f"Error: {e}")
+
         return []
