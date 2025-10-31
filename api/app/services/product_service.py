@@ -1,4 +1,4 @@
-from app.utils.mock_data import PRODUCTS
+from api.utils.mock_data import PRODUCTS
 
 def get_product_stock(product_name):
     """Fetch the stock count of a product"""
