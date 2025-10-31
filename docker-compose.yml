@@ -1,6 +1,9 @@
-version: '3.8'
+version: '3.9'
 
 services:
+  # ==============================
+  # RASA (Dialogue + NLU)
+  # ==============================
   rasa:
     image: rasa/rasa:3.6.2-full
     ports:
@@ -13,49 +16,109 @@ services:
       - --cors
       - "*"
       - --debug
-    depends_on:
-      - redis
-      - actions
     environment:
       - RASA_ACTIONS_URL=http://actions:5055/webhook
       - REDIS_HOST=redis
+    depends_on:
+      - redis
+      - actions
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5005/status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # ==============================
+  # RASA ACTIONS (Tool Calling + RAG Calls)
+  # ==============================
   actions:
-    image: rasa/rasa-sdk:3.6.0
+    build:
+      context: ./rasa
+      dockerfile: Dockerfile.actions
     ports:
       - "5055:5055"
     volumes:
       - ./rasa/actions:/app/actions
-    depends_on:
-      - flask-api
     environment:
       - FLASK_API_URL=http://flask-api:5000
+    depends_on:
+      - flask-api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5055/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # ==============================
+  # FLASK API (Agentic RAG + Business Endpoints)
+  # ==============================
   flask-api:
-    build: ./api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
     environment:
       - FLASK_ENV=production
       - REDIS_URL=redis://redis:6379/0
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - PINECONE_API_KEY=${PINECONE_API_KEY}
+      - COHERE_API_KEY=${COHERE_API_KEY}
     depends_on:
       - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # ==============================
+  # REDIS (Session & Cache)
+  # ==============================
   redis:
-    image: redis:alpine
+    image: redis:7-alpine
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    command: redis-server --save 60 1 --loglevel warning
 
+  # ==============================
+  # STREAMLIT (Frontend)
+  # ==============================
   streamlit:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "8501:8501"
     environment:
       - FLASK_API_URL=http://flask-api:5000
     depends_on:
       - flask-api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ==============================
+  # Monitoring (Prometheus + Grafana) : Future Work
+  # ==============================
+  # prometheus:
+  #   image: prom/prometheus
+  #   ports:
+  #     - "9090:9090"
+  #   volumes:
+  #     - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  # grafana:
+  #   image: grafana/grafana
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - prometheus
 
 volumes:
   redis_data:
