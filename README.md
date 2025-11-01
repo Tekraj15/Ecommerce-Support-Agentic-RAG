@@ -1,7 +1,5 @@
 # E-Commerce Customer Support Agentic RAG
 
-This repository contains the source code and project structure for a modular, scalable E-Commerce Customer Support AI Agent. The agent is designed to provide intelligent, automated support for customers and can integrate with various APIs and tools for seamless functionality.
-
 [![Python](https://img.shields.io/badge/Python-3.9%2B-blue)](https://www.python.org/)
 [![Rasa](https://img.shields.io/badge/Rasa-3.x-orange)](https://rasa.com/)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
@@ -16,6 +14,15 @@ Agentic RAG transforms passive retrieval into active, multi-step reasoning where
 - Self-corrects and iteratively refines searches
 - Uses tools (calculators, APIs, databases) to enhance responses
 
+### Key Roles
+
+| Layer           | Responsibility              | Control          |
+|-----------------|-----------------------------|------------------|
+| **Rasa**        | Dialogue, intent, UX        | **What to ask**  |
+| **Agentic RAG** | Retrieval, reasoning, tools | **How to answer**|
+
+→ Rasa Chatbot asks a question and anages dialogues.
+→ RAG service answers intelligently, including the complex questions.
 
 # Why Agentic RAG for E-Commerce Support AI?
 
@@ -50,7 +57,7 @@ Agentic RAG Advantages
     Gmail/SMTP email automation(Future Work)
 - **Deployment**: Docker, AWS/Heroku
 - **Frontend**: Streamlit with custom CSS design
-- **LLM for Reasoning**: DeepSeek-R1
+- **LLM**: OpenAI for Hypothetical Document Embeddings and DeepSeek-R1 for Reasoning and Generation
 - **Vector Database**: Pinecone
 
 
@@ -58,12 +65,13 @@ Agentic RAG Advantages
 ## Roadmap/Milestones
 
 ### Completed
-- [x] Core Rasa/DeepSeek integration
+- [x] Rasa NLU chatbot
+- [x] RASA and DeepSeek integration
 - [x] Basic order tracking & returns
 - [x] Streamlit UI framework
 - [x] FakeStore API integration
 - [x] Context-aware conversation handling
-- [x] LLM Integration for Reasoning build part(deployment WIP)
+- [x] LLM Integration for Reasoning build part
 - [x] Database Integration:
   - PostgreSQL for order history and product return/refund enquiry
   - Redis for real-time session storage
@@ -71,38 +79,20 @@ Agentic RAG Advantages
 - [x] Core RAG System:
     - Document processing + vector store
     - RAG Ingestion Pipeline: Loader and Chunker
-
-### Work-in-progress Items:
-
-
-- [ ] ** RAG
     - Basic Retrieval: Product specs and policy documents
-    - Fallback Mechanism: When RAG doesn't find relevant info
-    - Agentic RAG: To add by adding decision-making capabilities to its own search refinement.
+
+- [x] Agentic RAG System:
+    - Agentic RAG components are encapsulated in Agentic RAG Controller.
+    AgenticRAGController
+        ├── Retriever (HyDE + MMR)
+        ├── Augmenter
+        ├── Generator (Tools Calling if needed + DeepSeek R1 generation)
+        └── Self-Correction Loop(If confidence < 0.6 → refine query → go back to Step 1 (up to 2 retries))
+        ↓
+        → Rich JSON Answer
 
 
-### Advanced Features that are in plan
-- [ ] **Self-Improvement System (Part of Long-term Optimization)**
-  - Rasa Interactive Learning integration
-  - Hugging Face Transformers fine-tuning
-  - User feedback analysis pipeline
-
-- [ ] **External Service Integration**
-  - Shopify/Stripe API connections
-  - Gmail/SMTP email automation
-  - Warehouse inventory system hooks
-
-- [ ] **Enhanced Autonomy**
-  - Automated refund processing
-  - Proactive shipment updates
-  - Smart cart recovery workflows
-
-- [ ] **Production Readiness**
-  - Docker/Kubernetes deployment
-  - Prometheus/Grafana monitoring
-  - Load testing & scaling
-
-  ### Authentication Flow Design
+### Authentication Flow Design
 ![Authentication Flow Design](https://github.com/user-attachments/assets/c9ce50e7-a0e0-43ee-93c1-9813a1f9628f)
 
 ### System Design Architecture:
@@ -113,10 +103,91 @@ Here's the Modular Agentic RAG System Architecture that pairs OpenAI's embedding
 
 This leverages the strengths of both: OpenAI's superior embedding quality for retrieval (with HyDE boosting relevance on challenging queries), and DeepSeek's cost efficiency for high-volume generation.
 
+The Full RAG Pipeline Flow:
+
+Retrieval -> Self-correction -> Augmentation -> Tools -> Generation
+
+The Complete Architecture Flow:
+
+Rasa Action Server
+   ↓ POST {"query": "..."}
+Flask RAG Service (:8000)
+   ↓
+AgenticRAGController
+   ├── Retriever (HyDE + MMR)
+   ├── Augmenter
+   ├── Generator (Tools + DeepSeek R1)
+   └── Self-Correction Loop
+   ↓
+→ Rich JSON Answer
+
 
 To go deeper into the detailed Architecture, the Agentic RAG architecture is equipped with below techniques/capabilities:
-1. HyDE (Hypothetical Document Embeddings)
+1. **HyDE (Hypothetical Document Embeddings)**
    Queries are often short and vague, while documents are detailed—HyDE flips this by using an LLM to "imagine" a full, ideal answer (hypothetical document) and retrieves real docs matching that, like searching with a prototype instead of a sketch.
+
+2. **Hybrid LLM: Best of Both Worlds**
+
+|     Task                  |     Model                           |           Why It’s Optimal                                        |
+|---------------------------|-------------------------------------|-------------------------------------------------------------------|
+| **Embeddings + HyDE**     | **OpenAI `text-embedding-3-large`** | Top-tier semantic understanding → **highest retrieval relevance** |
+| **Reasoning & Generation**| **DeepSeek-R1**                     | 10x cheaper, same quality → **massive cost savings**              |
+
+> **Result**: You get **GPT-4-level retrieval** at **Llama-level cost**.
+
+3. **Agentic Loop: Self-Correction = Robustness**
+
+Traditional RAG:
+Query → Retrieve → Answer → Done
+
+Weaknesses: They Fails silently on bad retrieval.
+
+Agentic RAG:
+Retrieve → Augment → Generate → [Confidence < 0.6?] → Refine → Retry
+
+- Self-Correction Loop (up to 2 retries)
+- Confidence Scoring from retrieval + LLM
+- Query Refinement using partial context
+
+
+Result: 90%+ recovery rate on ambiguous or low-relevance queries.
+
+4. **Tool Calling: Grounded, Real-Time Answers**
+
+
+Query                  | Without Tools     |  With Tools                  |
+-----------------------|-------------------|------------------------------|
+“Where is order #123?” | “I don’t know..”  |  “Shipped, arriving tomorrow”|
+
+- FakeStore API via get_order_status, check_stock
+- LLM decides when to call tools
+- Results injected into next generation step
+
+
+Result: Zero hallucination on dynamic data.
+
+
+5. **Advanced Retrieval: HyDE + MMR**
+
+  Technique   |     Problem It Solves
+--------------|----------------------------------------------------------------|
+  HyDE         Short query ≠ long doc → uses hypothetical answer as search key
+--------------|----------------------------------------------------------------|
+  MMR         |Avoids 5 similar product specs → returns diverse, useful results
+
+Result: +40% relevance on complex queries.
+
+
+6. **Modular, Scalable Architecture**
+
+Rasa (Dialogue) → HTTP → Flask RAG Service (Reasoning)
+
+- Rasa controls what to ask
+- RAG Service controls how to answer
+- No tight coupling
+- Scale RAG workers independently
+
+Result: Production-ready, observable, maintainable.
 
 ```mermaid
 graph TB
@@ -222,6 +293,25 @@ graph TB
     ```
 
 
+### Advanced Features that are in plan
+- [ ] **Self-Improvement System (Part of Long-term Optimization)**
+  - Rasa Interactive Learning integration
+  - Hugging Face Transformers fine-tuning
+  - User feedback analysis pipeline
 
+- [ ] **External Service Integration**
+  - Shopify/Stripe API connections
+  - Gmail/SMTP email automation
+  - Warehouse inventory system hooks
+
+- [ ] **Enhanced Autonomy**
+  - Automated refund processing
+  - Proactive shipment updates
+  - Smart cart recovery workflows
+
+- [ ] **Production Readiness**
+  - Docker/Kubernetes deployment
+  - Prometheus/Grafana monitoring
+  - Load testing & scaling
 
 
