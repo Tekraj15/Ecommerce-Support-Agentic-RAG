@@ -22,6 +22,7 @@ Agentic RAG transforms passive retrieval into active, multi-step reasoning where
 | **Agentic RAG** | Retrieval, reasoning, tools | **How to answer**|
 
 → Rasa Chatbot asks a question and anages dialogues.
+
 → RAG service answers intelligently, including the complex questions.
 
 # Why Agentic RAG for E-Commerce Support AI?
@@ -83,11 +84,17 @@ Agentic RAG Advantages
 
 - [x] Agentic RAG System:
     - Agentic RAG components are encapsulated in Agentic RAG Controller.
+
     AgenticRAGController
+
         ├── Retriever (HyDE + MMR)
+
         ├── Augmenter
+
         ├── Generator (Tools Calling if needed + DeepSeek R1 generation)
+
         └── Self-Correction Loop(If confidence < 0.6 → refine query → go back to Step 1 (up to 2 retries))
+
         ↓
         → Rich JSON Answer
 
@@ -98,26 +105,38 @@ Agentic RAG Advantages
 ### System Design Architecture:
 <img width="3840" height="2095" alt="E-commerce AI Agent Arch " src="https://github.com/user-attachments/assets/d510630b-4f46-4847-a1bf-6f4f7e87d8cd" />
 Here's the Modular Agentic RAG System Architecture that pairs OpenAI's embeddings model "text-embedding-3-large" with DeepSeek-R1 for generation in this RAG pipeline.
+
 - OpenAI is used solely for embeddings and hypothetical generation in HyDE (via ChatOpenAI for the zero-shot doc creation).
+
 - The pipeline then switches to DeepSeek-R1 (via a compatible wrapper like ChatDeepSeek or a custom integration) for the final augmentation and response generation.
 
 This leverages the strengths of both: OpenAI's superior embedding quality for retrieval (with HyDE boosting relevance on challenging queries), and DeepSeek's cost efficiency for high-volume generation.
 
-The Full RAG Pipeline Flow:
+**The Full RAG Pipeline Flow**:
 
 Retrieval -> Self-correction -> Augmentation -> Tools -> Generation
 
-The Complete Architecture Flow:
+**The Complete Architecture Flow**:
 
 Rasa Action Server
+
    ↓ POST {"query": "..."}
+
 Flask RAG Service (:8000)
+
    ↓
+
+
 AgenticRAGController
+
    ├── Retriever (HyDE + MMR)
+
    ├── Augmenter
+
    ├── Generator (Tools + DeepSeek R1)
+
    └── Self-Correction Loop
+
    ↓
 → Rich JSON Answer
 
@@ -169,11 +188,10 @@ Result: Zero hallucination on dynamic data.
 
 5. **Advanced Retrieval: HyDE + MMR**
 
-  Technique   |     Problem It Solves
+  Technique   |     Problem It Solves                                          |
 --------------|----------------------------------------------------------------|
-  HyDE         Short query ≠ long doc → uses hypothetical answer as search key
---------------|----------------------------------------------------------------|
-  MMR         |Avoids 5 similar product specs → returns diverse, useful results
+  HyDE        | Short query ≠ long doc → uses hypothetical answer as search key|
+  MMR         |Avoids 5 similar product specs → returns diverse, useful results|
 
 Result: +40% relevance on complex queries.
 
@@ -188,6 +206,7 @@ Rasa (Dialogue) → HTTP → Flask RAG Service (Reasoning)
 - Scale RAG workers independently
 
 Result: Production-ready, observable, maintainable.
+
 
 ```mermaid
 graph TB
@@ -291,27 +310,3 @@ graph TB
     class DI,DP,QC ingestion;
     class FS,DB,REDIS,OPENAI,DEEPSEEK,HUMAN external;
     ```
-
-
-### Advanced Features that are in plan
-- [ ] **Self-Improvement System (Part of Long-term Optimization)**
-  - Rasa Interactive Learning integration
-  - Hugging Face Transformers fine-tuning
-  - User feedback analysis pipeline
-
-- [ ] **External Service Integration**
-  - Shopify/Stripe API connections
-  - Gmail/SMTP email automation
-  - Warehouse inventory system hooks
-
-- [ ] **Enhanced Autonomy**
-  - Automated refund processing
-  - Proactive shipment updates
-  - Smart cart recovery workflows
-
-- [ ] **Production Readiness**
-  - Docker/Kubernetes deployment
-  - Prometheus/Grafana monitoring
-  - Load testing & scaling
-
-
