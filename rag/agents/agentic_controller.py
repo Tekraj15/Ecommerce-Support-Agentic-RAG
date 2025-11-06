@@ -63,10 +63,11 @@ class AgenticRAGController:
                     return {
                         "answer": result["response"],
                         "sources": augmented["metadata"]["sources"],
-                        "confidence": round(confidence, 3),
+                        "confidence": confidence,
                         "tool_calls": tool_calls_history,
                         "hops": hop + 1,
-                        "retrieval_retries": retry_count
+                        "retrieval_retries": retry_count,
+                        "retrieved_docs": docs  # For evaluation purposes
                     }
 
         return {
