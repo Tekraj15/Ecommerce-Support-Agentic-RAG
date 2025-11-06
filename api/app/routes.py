@@ -7,9 +7,19 @@ from rag.agents.agentic_controller import AgenticRAGController
 from langchain_openai import OpenAIEmbeddings
 import os
 from dotenv import load_dotenv
+from app.services.return_refund_service import (
+    get_return_policy, 
+    get_refund_policy
+)
+
+from app.services.payment_shipping_service import (
+    get_shipping_info,
+    get_payment_methods,
+    get_payment_policy,
+    get_warranty_info
+)
 
 load_dotenv()
-
 api_blueprint = Blueprint('api', __name__)
 
 # === Core Business Endpoints ===
@@ -26,7 +36,7 @@ def product_stock(product_name):
     return jsonify({"product_name": product_name, "stock": stock})
 
 
-# === Agentic RAG Endpoint (UPGRADED) ===
+# === Agentic RAG Endpoint  ===
 # Initialize once at startup
 vector_store = PineconeVectorStore(index_name="ecommerce-agentic-rag")
 embedder = OpenAIEmbeddings(model="text-embedding-3-large", api_key=os.getenv("OPENAI_API_KEY"))
@@ -57,3 +67,31 @@ def rag_query():
         })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+
+# === RAG Evaluation End-points ===
+@api_blueprint.route('/returns/policy', methods=['GET'])
+def return_policy():
+    product_id = request.args.get('product_id')
+    return jsonify(get_return_policy(product_id))
+
+@api_blueprint.route('/refunds/policy', methods=['GET'])
+def refund_policy():
+    product_id = request.args.get('product_id')
+    return jsonify(get_refund_policy(product_id))
+
+@api_blueprint.route('/shipping', methods=['GET'])
+def shipping():
+    return jsonify(get_shipping_info())
+
+@api_blueprint.route('/payment/methods', methods=['GET'])
+def payment_methods():
+    return jsonify(get_payment_methods())
+
+@api_blueprint.route('/payment/policy', methods=['GET'])
+def payment_policy():
+    return jsonify(get_payment_policy())
+
+@api_blueprint.route('/warranty/<product_id>', methods=['GET'])
+def warranty(product_id):
+    return jsonify(get_warranty_info(product_id))
