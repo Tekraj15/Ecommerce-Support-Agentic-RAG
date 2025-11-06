@@ -61,13 +61,17 @@ POLICIES = {
     "shipping": {
         "international": True,
         "countries": 50,
+        "free_threshold": 50.0,
+        "cost_domestic": 5.99,
+        "cost_international": 19.99,
+        "carriers": ["DHL", "FedEx", "UPS"],
         "source": "payment_and_shipping_options.pdf"
     },
     "products": {
         "PROD-001": {
             "return": {"days": 30, "condition": "sealed box"},
             "refund": {"processing_time": "7 business days"},
-            "warranty": "2 years",
+            "warranty": "2 years manufacturer warranty + 1 year accidental damage",
             "source": "laptop_warranty.pdf"
         },
         "PROD-002": {
@@ -79,8 +83,16 @@ POLICIES = {
         "PROD-003": {
             "return": {"days": 30},
             "refund": {"processing_time": "10 business days"},
-            "warranty": "1 year",
+            "warranty": "1 year limited warranty",
             "source": "headphones_warranty.pdf"
         }
+    },
+    "payment": {
+    "methods": ["Credit Card", "PayPal", "Apple Pay", "Google Pay"],
+    "security": "256-bit SSL, PCI-DSS Level 1",
+    "failed_payment": "We retry failed payments 3 times over 48 hours.",
+    "refund_on_failure": True,
+    "form_url": "https://forms.gle/payment-support-dummy",
+    "source": "payment_and_shipping_options.pdf"
     }
 }
